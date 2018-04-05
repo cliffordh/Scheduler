@@ -41,9 +41,6 @@ public class MentorListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_list);
 
-        listView =(ListView)findViewById(R.id.contentlist);
-        listView.setAdapter(fetchList());
-
         listView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,

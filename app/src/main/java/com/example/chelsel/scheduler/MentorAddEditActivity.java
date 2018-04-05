@@ -59,6 +59,9 @@ public class MentorAddEditActivity extends Activity {
         {
             setTitle("Mentor");
             saveButton.setVisibility(View.INVISIBLE);
+            nameEdit.setText(m.name);
+            emailEdit.setText(m.email);
+            phoneEdit.setText(m.phone);
         }
     }
 
