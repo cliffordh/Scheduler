@@ -21,7 +21,7 @@ public interface AssessmentDao {
     void delete(Assessment... assessments);
 
     @Query ("DELETE FROM Assessment")
-    void truncateMentors();
+    void truncateAssessments();
 
     @Query("Select * FROM Assessment")
     Assessment[] loadAll();

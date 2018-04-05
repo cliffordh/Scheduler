@@ -28,6 +28,7 @@ public class DataGenerator {
         if (dataBase == null)
             return;
         dataBase.mentorDao().truncateMentors();
+        dataBase.assessmentDao().truncateAssessments();
     }
 
     public void generateMentors() {

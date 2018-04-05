@@ -22,17 +22,28 @@ public class MentorListActivity extends Activity {
     private MentorAdapter mAdapter;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        listView =(ListView)findViewById(R.id.contentlist);
+        listView.setAdapter(fetchList());
+    }
+
+    private MentorAdapter fetchList() {
+
+        AppDataBase database = AppDataBase.getAppDatabase(this);
+        Mentor[] mentorArray = database.mentorDao().loadAll();
+        ArrayList<Mentor> list = new ArrayList<>(Arrays.asList(mentorArray));
+        return new MentorAdapter(this,list);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_list);
 
-        AppDataBase database = AppDataBase.getAppDatabase(this);
         listView =(ListView)findViewById(R.id.contentlist);
-        Mentor[] mentorArray = database.mentorDao().loadAll();
-        ArrayList<Mentor> list = new ArrayList<>(Arrays.asList(mentorArray));
+        listView.setAdapter(fetchList());
 
-        mAdapter = new MentorAdapter(this,list);
-        listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,

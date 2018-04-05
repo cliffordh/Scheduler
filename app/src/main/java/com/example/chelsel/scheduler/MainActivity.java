@@ -15,7 +15,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         AppDataBase database = AppDataBase.getAppDatabase(this);
 
         DataGenerator.with(database).reset(); // clear out existing tables

@@ -21,6 +21,7 @@
             android:id="@+id/editname"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
+            android:inputType="textPersonName"
             android:layout_marginLeft="15dip"
             android:layout_weight="0.7" />
     </LinearLayout>
@@ -40,6 +41,7 @@
         <EditText
             android:id="@+id/editphone"
             android:layout_width="0dip"
+            android:inputType="phone"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dip"
             android:layout_weight="0.7" />
@@ -60,6 +62,7 @@
         <EditText
             android:id="@+id/editemail"
             android:layout_width="0dip"
+            android:inputType="textEmailAddress"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dip"
             android:layout_weight="0.7" />
