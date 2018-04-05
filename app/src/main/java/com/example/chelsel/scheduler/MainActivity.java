@@ -7,6 +7,8 @@ import android.view.View;
 import android.content.Intent;
 import com.example.chelsel.scheduler.utilities.*;
 
+//TODO: https://www.youtube.com/watch?v=0s6x3Sn4eYo Implement sliding animations
+
 public class MainActivity extends Activity {
 
     @Override
