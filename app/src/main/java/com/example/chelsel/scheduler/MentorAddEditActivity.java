@@ -23,12 +23,13 @@ public class MentorAddEditActivity extends Activity {
     private EditText phoneEdit;
     private EditText emailEdit;
 
+    final AppDataBase database = AppDataBase.getAppDatabase(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_add_edit);
 
-        final AppDataBase database = AppDataBase.getAppDatabase(this);
         saveButton = (Button) findViewById(R.id.savebutton);
         nameEdit = (EditText) findViewById(R.id.editname);
         phoneEdit = (EditText) findViewById(R.id.editphone);
@@ -37,14 +38,19 @@ public class MentorAddEditActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Mentor newMentor=new Mentor();
-                newMentor.name=nameEdit.getText().toString().trim();
-                newMentor.phone=phoneEdit.getText().toString().trim();
-                newMentor.email=emailEdit.getText().toString().trim();
-                database.mentorDao().insert(newMentor);
-                Mentor[] mentors=database.mentorDao().loadAll();
-                System.out.println(mentors);
-                Toast.makeText(getApplicationContext(), "New mentor saved!",
+                boolean isUpdate=true;
+                if(m==null) {
+                   m=new Mentor();
+                   isUpdate=false;
+                }
+                m.name=nameEdit.getText().toString().trim();
+                m.phone=phoneEdit.getText().toString().trim();
+                m.email=emailEdit.getText().toString().trim();
+                if(isUpdate)
+                    database.mentorDao().update(m);
+                else
+                    database.mentorDao().insert(m);
+                Toast.makeText(getApplicationContext(), "Mentor saved!",
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -54,11 +60,9 @@ public class MentorAddEditActivity extends Activity {
         if(m==null)
         {
             setTitle("Add Mentor");
-            saveButton.setVisibility(View.VISIBLE);
         } else
         {
-            setTitle("Mentor");
-            saveButton.setVisibility(View.INVISIBLE);
+            setTitle("View/Edit Mentor");
             nameEdit.setText(m.name);
             emailEdit.setText(m.email);
             phoneEdit.setText(m.phone);
@@ -78,9 +82,9 @@ public class MentorAddEditActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.action_edit:
-                return true;
             case R.id.action_delete:
+                database.mentorDao().delete(m);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
