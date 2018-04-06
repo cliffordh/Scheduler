@@ -25,5 +25,10 @@ public interface TermDao {
 
     @Transaction
     @Query("Select * FROM Term")
-    List<TermPojo> loadTerms();
+    Term[] loadAll();
+//    List<TermPojo> loadTerms();
+
+    @Query ("DELETE FROM Term")
+    void truncateTerms();
+
 }

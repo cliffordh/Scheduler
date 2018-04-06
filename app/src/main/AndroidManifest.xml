@@ -29,7 +29,7 @@
                 android:value="com.example.chelsel.scheduler.MainActivity" />
         </activity>
         <activity
-            android:name=".TermDetailActivity"
+            android:name=".TermAddEditActivity"
             android:label="@string/title_term_detail"
             android:parentActivityName=".TermListActivity">
             <meta-data

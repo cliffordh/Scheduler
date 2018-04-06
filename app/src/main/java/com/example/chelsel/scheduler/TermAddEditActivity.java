@@ -1,7 +1,7 @@
 package com.example.chelsel.scheduler;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,59 +10,59 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.chelsel.scheduler.entity.Mentor;
+import com.example.chelsel.scheduler.entity.Term;
 
-public class MentorAddEditActivity extends Activity {
+public class TermAddEditActivity extends Activity {
 
-    private Mentor m;
+    private Term m;
     private Button saveButton;
-    private EditText nameEdit;
-    private EditText phoneEdit;
-    private EditText emailEdit;
+    private EditText titleEdit;
+    private EditText startdateEdit;
+    private EditText enddateEdit;
 
     final AppDataBase database = AppDataBase.getAppDatabase(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mentor_add_edit);
+        setContentView(R.layout.activity_term_add_edit);
 
         saveButton = (Button) findViewById(R.id.savebutton);
-        nameEdit = (EditText) findViewById(R.id.editname);
-        phoneEdit = (EditText) findViewById(R.id.editphone);
-        emailEdit = (EditText) findViewById(R.id.editemail);
+        titleEdit = (EditText) findViewById(R.id.edittitle);
+        startdateEdit = (EditText) findViewById(R.id.editstartdate);
+        enddateEdit = (EditText) findViewById(R.id.editenddate);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean isUpdate=true;
                 if(m==null) {
-                   m=new Mentor();
+                   m=new Term();
                    isUpdate=false;
                 }
-                m.name=nameEdit.getText().toString().trim();
-                m.phone=phoneEdit.getText().toString().trim();
-                m.email=emailEdit.getText().toString().trim();
+                m.title=titleEdit.getText().toString().trim();
+//                m.startDate=startdateEdit.getText().toString().trim();
+//                m.endDate=enddateEdit.getText().toString().trim();
                 if(isUpdate)
-                    database.mentorDao().update(m);
+                    database.termDao().update(m);
                 else
-                    database.mentorDao().insert(m);
-                Toast.makeText(getApplicationContext(), "Mentor saved!",
+                    database.termDao().insert(m);
+                Toast.makeText(getApplicationContext(), "Term saved!",
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        m =(Mentor) getIntent().getSerializableExtra("mentor");
+        m =(Term) getIntent().getSerializableExtra("term");
         if(m==null)
         {
-            setTitle("Add Mentor");
+            setTitle("Add Term");
         } else
         {
-            setTitle("View/Edit Mentor");
-            nameEdit.setText(m.name);
-            emailEdit.setText(m.email);
-            phoneEdit.setText(m.phone);
+            setTitle("View/Edit Term");
+            titleEdit.setText(m.title);
+//            startdateEdit.setText(m.startDate);
+//            enddateEdit.setText(m.endDate);
         }
     }
 
@@ -80,7 +80,7 @@ public class MentorAddEditActivity extends Activity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_delete:
-                database.mentorDao().delete(m);
+                database.termDao().delete(m);
                 finish();
                 return true;
             default:

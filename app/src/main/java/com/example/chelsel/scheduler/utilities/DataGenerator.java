@@ -12,7 +12,6 @@ public class DataGenerator {
     private static DataGenerator instance;
     private static AppDataBase dataBase;
 
-
     public static DataGenerator with(AppDataBase appDataBase) {
 
         if (dataBase == null)
@@ -29,6 +28,7 @@ public class DataGenerator {
             return;
         dataBase.mentorDao().truncateMentors();
         dataBase.assessmentDao().truncateAssessments();
+        dataBase.termDao().truncateTerms();
     }
 
     public void generateMentors() {
@@ -40,6 +40,17 @@ public class DataGenerator {
         mentors[1] = mentorInstance("Lisa","lisamarie61283@gmail.com","5617067761");
 
         dataBase.mentorDao().insert(mentors);
+    }
+
+    public void generateTerms() {
+        if (dataBase == null)
+            return;
+
+        Term[] terms = new Term[2];
+        terms[0] = termInstance("Term 1",new Date(),new Date());
+        terms[1] = termInstance("Term 2",new Date(),new Date());
+
+        dataBase.termDao().insert(terms);
     }
 
     public void generateAssessments() {
@@ -61,6 +72,16 @@ public class DataGenerator {
         mentor.phone = phone;
 
         return mentor;
+    }
+
+    private Term termInstance(String title, Date startDate, Date endDate) {
+        Term term = new Term();
+
+        term.title = title;
+        term.startDate = startDate;
+        term.endDate = endDate;
+
+        return term;
     }
 
     private Assessment assessmentInstance(String title, Date startDate, Date endDate) {

@@ -18,7 +18,7 @@ public class Logger {
             return;
         
         for (Mentor mentor : mentors) {
-            Log.d(TAG, "Mentor ID: " + mentor.mentorid + "Mentor name: " + mentor.name + ", mentor email: " + mentor.email + ", mentor phone: " + mentor.phone);
+            Log.d(TAG, "Mentor ID: " + mentor.mentorid + "Mentor name: " + mentor.name + ", email: " + mentor.email + ", phone: " + mentor.phone);
         }
     }
 

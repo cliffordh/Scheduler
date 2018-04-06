@@ -1,7 +1,6 @@
 package com.example.chelsel.scheduler;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.widget.ArrayAdapter;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ public class MentorAdapter extends ArrayAdapter<Mentor> {
     private Context mContext;
     private List<Mentor> mentorList = new ArrayList<>();
 
-    public MentorAdapter(@NonNull Context context, @LayoutRes ArrayList<Mentor> list) {
+    public MentorAdapter(@NonNull Context context, ArrayList<Mentor> list) {
         super(context,0,list);
         mContext = context;
         mentorList = list;

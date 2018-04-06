@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
 
         DataGenerator.with(database).generateMentors();
         DataGenerator.with(database).generateAssessments();
+        DataGenerator.with(database).generateTerms();
 
         Logger.displayMentorsInLog(database.mentorDao().loadAll());
         Logger.displayAssessmentsInLog(database.assessmentDao().loadAll());
@@ -43,7 +44,7 @@ public class MainActivity extends Activity {
     /** Called when the user taps the Terms button */
     public void termsPressed(View view) {
         // Do something in response to button
-        Intent intent = new Intent(this, MentorListActivity.class);
+        Intent intent = new Intent(this, TermListActivity.class);
         startActivity(intent);
     }
     /** Called when the user taps the Settings button */
