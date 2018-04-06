@@ -14,14 +14,14 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="Name:"
+            android:text="Title:"
             android:gravity="right"/>
 
         <EditText
             android:id="@+id/edittitle"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textCapWords"
             android:layout_marginLeft="15dip"
             android:layout_weight="0.7" />
     </LinearLayout>
@@ -35,7 +35,7 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="Phone:"
+            android:text="Start Date:"
             android:gravity="right"/>
 
         <EditText
@@ -56,7 +56,7 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="Email:"
+            android:text="End Date:"
             android:gravity="right"/>
 
         <EditText

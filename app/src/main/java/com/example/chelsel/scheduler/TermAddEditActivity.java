@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.example.chelsel.scheduler.entity.Term;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+
 public class TermAddEditActivity extends Activity {
 
     private Term m;
@@ -21,6 +24,8 @@ public class TermAddEditActivity extends Activity {
     private EditText enddateEdit;
 
     final AppDataBase database = AppDataBase.getAppDatabase(this);
+
+    final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +46,8 @@ public class TermAddEditActivity extends Activity {
                    isUpdate=false;
                 }
                 m.title=titleEdit.getText().toString().trim();
-//                m.startDate=startdateEdit.getText().toString().trim();
-//                m.endDate=enddateEdit.getText().toString().trim();
+                m.startDate=formatter.parse(startdateEdit.getText().toString().trim(),new ParsePosition(0));
+                m.endDate=formatter.parse(enddateEdit.getText().toString().trim(),new ParsePosition(0));
                 if(isUpdate)
                     database.termDao().update(m);
                 else
@@ -61,8 +66,8 @@ public class TermAddEditActivity extends Activity {
         {
             setTitle("View/Edit Term");
             titleEdit.setText(m.title);
-//            startdateEdit.setText(m.startDate);
-//            enddateEdit.setText(m.endDate);
+            startdateEdit.setText(formatter.format(m.startDate));
+            enddateEdit.setText(formatter.format(m.endDate));
         }
     }
 

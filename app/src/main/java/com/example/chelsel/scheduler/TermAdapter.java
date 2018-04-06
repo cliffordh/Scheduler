@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.chelsel.scheduler.entity.Term;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +35,18 @@ public class TermAdapter extends ArrayAdapter<Term> {
 
         Term currentTerm = termList.get(position);
 
-        TextView name = (TextView) listItem.findViewById(R.id.textView_title);
-        name.setText(currentTerm.title);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM/dd/yyyy");
 
-//        TextView email = (TextView) listItem.findViewById(R.id.textView_startdate);
-//        email.setText(currentTerm.startDate);
+        TextView title = (TextView) listItem.findViewById(R.id.textView_title);
+        title.setText(currentTerm.title);
 
-//        TextView phone = (TextView) listItem.findViewById(R.id.textView_enddate);
-//        phone.setText(currentTerm.endDate);
+        TextView startDate = (TextView) listItem.findViewById(R.id.textView_startdate);
+        String formattedStartDate = dateFormat.format(currentTerm.startDate);
+        startDate.setText(formattedStartDate);
+
+        TextView endDate = (TextView) listItem.findViewById(R.id.textView_enddate);
+        String formattedEndDate = dateFormat.format(currentTerm.endDate);
+        endDate.setText(formattedEndDate);
 
         return listItem;
     }
