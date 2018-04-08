@@ -5,21 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.MenuInflater;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.example.chelsel.scheduler.entity.Course;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.example.chelsel.scheduler.entity.Mentor;
-
-public class MentorListActivity extends AppCompatActivity {
+public class CourseListActivity extends AppCompatActivity {
 
     private ListView listView;
-    private MentorAdapter mAdapter;
+    private CourseAdapter mAdapter;
 
     @Override
     protected void onResume() {
@@ -27,27 +27,27 @@ public class MentorListActivity extends AppCompatActivity {
         listView.setAdapter(fetchList());
     }
 
-    private MentorAdapter fetchList() {
+    private CourseAdapter fetchList() {
 
         AppDataBase database = AppDataBase.getAppDatabase(this);
-        Mentor[] mentorArray = database.mentorDao().loadAll();
-        ArrayList<Mentor> list = new ArrayList<>(Arrays.asList(mentorArray));
-        return new MentorAdapter(this,list);
+        Course[] courseArray = database.courseDao().loadAll();
+        ArrayList<Course> list = new ArrayList<>(Arrays.asList(courseArray));
+        return new CourseAdapter(this,list);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mentor_list);
+        setContentView(R.layout.activity_course_list);
 
         listView =(ListView)findViewById(R.id.contentlist);
         listView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                Intent intent = new Intent(MentorListActivity.this, MentorAddEditActivity.class);
-                Mentor mentor = (Mentor) parent.getItemAtPosition(position);
-                intent.putExtra("mentor", mentor);
+                Intent intent = new Intent(CourseListActivity.this, CourseAddEditActivity.class);
+                Course course = (Course) parent.getItemAtPosition(position);
+                intent.putExtra("course", course);
                 startActivity(intent);
             }
         });
@@ -65,7 +65,7 @@ public class MentorListActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_add:
-                Intent intent = new Intent(this, MentorAddEditActivity.class);
+                Intent intent = new Intent(this, CourseAddEditActivity.class);
                 startActivity(intent);
                 return true;
             default:

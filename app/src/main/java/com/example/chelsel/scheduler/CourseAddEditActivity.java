@@ -10,59 +10,64 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.chelsel.scheduler.entity.Mentor;
+import com.example.chelsel.scheduler.entity.Course;
 
-public class MentorAddEditActivity extends AppCompatActivity {
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 
-    private Mentor m;
+public class CourseAddEditActivity extends AppCompatActivity {
+
+    private Course m;
     private Button saveButton;
-    private EditText nameEdit;
-    private EditText phoneEdit;
-    private EditText emailEdit;
+    private EditText titleEdit;
+    private EditText startdateEdit;
+    private EditText enddateEdit;
 
     final AppDataBase database = AppDataBase.getAppDatabase(this);
+
+    final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mentor_add_edit);
+        setContentView(R.layout.activity_course_add_edit);
 
         saveButton = (Button) findViewById(R.id.savebutton);
-        nameEdit = (EditText) findViewById(R.id.editname);
-        phoneEdit = (EditText) findViewById(R.id.editphone);
-        emailEdit = (EditText) findViewById(R.id.editemail);
+        titleEdit = (EditText) findViewById(R.id.edittitle);
+        startdateEdit = (EditText) findViewById(R.id.editstartdate);
+        enddateEdit = (EditText) findViewById(R.id.editenddate);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean isUpdate=true;
                 if(m==null) {
-                   m=new Mentor();
+                   m=new Course();
                    isUpdate=false;
                 }
-                m.name=nameEdit.getText().toString().trim();
-                m.phone=phoneEdit.getText().toString().trim();
-                m.email=emailEdit.getText().toString().trim();
+                m.title=titleEdit.getText().toString().trim();
+                m.startDate=formatter.parse(startdateEdit.getText().toString().trim(),new ParsePosition(0));
+                m.endDate=formatter.parse(enddateEdit.getText().toString().trim(),new ParsePosition(0));
                 if(isUpdate)
-                    database.mentorDao().update(m);
+                    database.courseDao().update(m);
                 else
-                    database.mentorDao().insert(m);
-                Toast.makeText(getApplicationContext(), "Mentor saved!",
+                    database.courseDao().insert(m);
+                Toast.makeText(getApplicationContext(), "Course saved!",
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        m =(Mentor) getIntent().getSerializableExtra("mentor");
+        m =(Course) getIntent().getSerializableExtra("course");
         if(m==null)
         {
-            setTitle("Add Mentor");
+            setTitle("Add Course");
         } else
         {
-            setTitle("View/Edit Mentor");
-            nameEdit.setText(m.name);
-            emailEdit.setText(m.email);
-            phoneEdit.setText(m.phone);
+            setTitle("View/Edit Course");
+            titleEdit.setText(m.title);
+            startdateEdit.setText(formatter.format(m.startDate));
+            enddateEdit.setText(formatter.format(m.endDate));
         }
     }
 
@@ -80,7 +85,7 @@ public class MentorAddEditActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_delete:
-                database.mentorDao().delete(m);
+                database.courseDao().delete(m);
                 finish();
                 return true;
             default:

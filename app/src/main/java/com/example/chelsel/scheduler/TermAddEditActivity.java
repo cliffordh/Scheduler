@@ -1,7 +1,7 @@
 package com.example.chelsel.scheduler;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +15,7 @@ import com.example.chelsel.scheduler.entity.Term;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 
-public class TermAddEditActivity extends Activity {
+public class TermAddEditActivity extends AppCompatActivity {
 
     private Term m;
     private Button saveButton;
@@ -57,7 +57,7 @@ public class TermAddEditActivity extends Activity {
                 finish();
             }
         });
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         m =(Term) getIntent().getSerializableExtra("term");
         if(m==null)
         {

@@ -5,10 +5,12 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Course {
+public class Course implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public int courseid;
 

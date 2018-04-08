@@ -24,7 +24,10 @@ public interface CourseDao {
     @Delete
     void delete(Course... course);
 
+    @Query ("DELETE FROM Course")
+    void truncateCourses();
+
     @Transaction
     @Query("Select * FROM Course")
-    List<CoursePojo> loadCourses();
+    Course[] loadAll();
 }

@@ -29,6 +29,7 @@ public class DataGenerator {
         dataBase.mentorDao().truncateMentors();
         dataBase.assessmentDao().truncateAssessments();
         dataBase.termDao().truncateTerms();
+        dataBase.courseDao().truncateCourses();
     }
 
     public void generateMentors() {
@@ -51,6 +52,17 @@ public class DataGenerator {
         terms[1] = termInstance("Term 2",new Date(),new Date());
 
         dataBase.termDao().insert(terms);
+    }
+
+    public void generateCourses() {
+        if (dataBase == null)
+            return;
+
+        Course[] courses = new Course[2];
+        courses[0] = courseInstance("Mobile App Development",new Date(),new Date());
+        courses[1] = courseInstance("Physics",new Date(),new Date());
+
+        dataBase.courseDao().insert(courses);
     }
 
     public void generateAssessments() {
@@ -82,6 +94,16 @@ public class DataGenerator {
         term.endDate = endDate;
 
         return term;
+    }
+
+    private Course courseInstance(String title, Date startDate, Date endDate) {
+        Course course = new Course();
+
+        course.title = title;
+        course.startDate = startDate;
+        course.endDate = endDate;
+
+        return course;
     }
 
     private Assessment assessmentInstance(String title, Date startDate, Date endDate) {

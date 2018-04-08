@@ -1,9 +1,9 @@
 package com.example.chelsel.scheduler;
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +16,7 @@ import com.example.chelsel.scheduler.entity.Term;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class TermListActivity extends Activity {
+public class TermListActivity extends AppCompatActivity {
 
     private ListView listView;
     private TermAdapter mAdapter;
@@ -66,7 +66,7 @@ public class TermListActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.action_add:
                 Intent intent = new Intent(this, TermAddEditActivity.class);
-                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

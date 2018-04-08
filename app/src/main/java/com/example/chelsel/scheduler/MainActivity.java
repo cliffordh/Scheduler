@@ -1,15 +1,14 @@
 package com.example.chelsel.scheduler;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.content.Intent;
 import com.example.chelsel.scheduler.utilities.*;
 
 //TODO: https://www.youtube.com/watch?v=0s6x3Sn4eYo Implement sliding animations
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
@@ -51,35 +50,29 @@ public class MainActivity extends Activity {
         DataGenerator.with(database).generateMentors();
         DataGenerator.with(database).generateAssessments();
         DataGenerator.with(database).generateTerms();
-
-        Logger.displayMentorsInLog(database.mentorDao().loadAll());
-        Logger.displayAssessmentsInLog(database.assessmentDao().loadAll());
+        DataGenerator.with(database).generateCourses();
     }
 
     /** Called when the user taps the Mentor button */
     public void mentorPressed(View view) {
-        // Do something in response to button
         Intent intent = new Intent(this, MentorListActivity.class);
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        startActivity(intent);
     }
 
     /** Called when the user taps the Courses button */
     public void coursesPressed(View view) {
-        // Do something in response to button
-        Intent intent = new Intent(this, MentorListActivity.class);
+        Intent intent = new Intent(this, CourseListActivity.class);
         startActivity(intent);
     }
 
     /** Called when the user taps the Terms button */
     public void termsPressed(View view) {
-        // Do something in response to button
         Intent intent = new Intent(this, TermListActivity.class);
         startActivity(intent);
     }
     /** Called when the user taps the Settings button */
     public void settingsPressed(View view) {
-        // Do something in response to button
-        Intent intent = new Intent(this, MentorListActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MentorListActivity.class);
+//        startActivity(intent);
     }
 }

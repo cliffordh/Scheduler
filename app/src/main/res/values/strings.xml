@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Scheduler</string>
-    <string name="title_activity_mentor_list">MentorListActivity</string>
+    <string name="title_activity_mentor_list">Mentors</string>
     <string name="title_term_list">Terms</string>
+    <string name="title_course_list">Courses</string>
     <string name="title_term_detail">Term Detail</string>
     <string name="title_activity_mentor_add_edit">MentorAddEditActivity</string>
 </resources>
