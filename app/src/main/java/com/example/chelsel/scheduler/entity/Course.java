@@ -20,7 +20,6 @@ public class Course implements Serializable {
     public String title;
     public Date startDate;
     public Date endDate;
-    public int age;
     public String status;
     public String notes;
 }

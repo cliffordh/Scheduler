@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
         android:paddingLeft="30dip"
         android:paddingRight="50dip">
         <TextView
@@ -64,6 +65,51 @@
             android:layout_width="0dip"
             android:inputType="date"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dip"
+            android:layout_weight="0.7" />
+    </LinearLayout>
+   <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="30dip"
+        android:paddingRight="50dip">
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="Notes:"
+            android:gravity="right"/>
+
+        <EditText
+            android:id="@+id/editnotes"
+            android:layout_width="0dip"
+            android:inputType="textMultiLine"
+            android:lines="2"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dip"
+            android:layout_weight="0.7" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingLeft="30dip"
+        android:paddingRight="50dip">
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="Status:"
+            android:gravity="right"/>
+
+        <Spinner
+            android:id="@+id/spinnerstatus"
+            android:layout_width="0dip"
+            android:spinnerMode="dialog"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
             android:layout_marginLeft="15dip"
             android:layout_weight="0.7" />
     </LinearLayout>
