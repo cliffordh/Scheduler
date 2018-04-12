@@ -49,30 +49,29 @@ public class TermAddEditActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
- //       listView.setAdapter(fetchList());
+        listView.setAdapter(fetchList());
     }
-/*
-    private EditableCourseAdapter fetchList() {
+
+    private EmbeddedCourseAdapter fetchList() {
 
         AppDataBase database = AppDataBase.getAppDatabase(this);
         Course[] courseArray = database.courseDao().loadAll();
         ArrayList<Course> list = new ArrayList<>(Arrays.asList(courseArray));
-        return new EditableCourseAdapter(this,list);
+        return new EmbeddedCourseAdapter(this,list);
     }
-    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_add_edit);
 
-        saveButton = (Button) findViewById(R.id.savebutton);
-        titleEdit = (EditText) findViewById(R.id.edittitle);
-        startdateEdit = (EditText) findViewById(R.id.editstartdate);
-        enddateEdit = (EditText) findViewById(R.id.editenddate);
+        saveButton = findViewById(R.id.savebutton);
+        titleEdit = findViewById(R.id.edittitle);
+        startdateEdit = findViewById(R.id.editstartdate);
+        enddateEdit = findViewById(R.id.editenddate);
 
-/*        listView =(ListView)findViewById(R.id.contentlist);
-        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
+        listView = findViewById(R.id.contentlist);
+/*        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
@@ -82,7 +81,7 @@ public class TermAddEditActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        */
+            */
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,13 +158,13 @@ public class TermAddEditActivity extends AppCompatActivity {
         }
     }
 }
-/*
-private class EditableCourseAdapter extends ArrayAdapter<Course> {
+
+class EmbeddedCourseAdapter extends ArrayAdapter<Course> {
 
     private Context mContext;
     private List<Course> courseList = new ArrayList<>();
 
-    public CourseAdapter(@NonNull Context context, ArrayList<Course> list) {
+    public EmbeddedCourseAdapter(@NonNull Context context, ArrayList<Course> list) {
         super(context,0,list);
         mContext = context;
         courseList = list;
@@ -176,16 +175,13 @@ private class EditableCourseAdapter extends ArrayAdapter<Course> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.course_row,parent,false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.embedded_course_row,parent,false);
 
         Course currentCourse = courseList.get(position);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM/dd/yyyy");
-
-        TextView title = (TextView) listItem.findViewById(R.id.textView_title);
+        TextView title = listItem.findViewById(R.id.textView_title);
         title.setText(currentCourse.title);
 
         return listItem;
     }
 }
-*/

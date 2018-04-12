@@ -67,6 +67,21 @@
             android:layout_marginLeft="15dip"
             android:layout_weight="0.7" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:paddingLeft="50dip"
+        android:paddingRight="50dip">
+        <ListView
+            android:id="@+id/contentlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
