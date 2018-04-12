@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class TermAddEditActivity extends AppCompatActivity {
 
@@ -38,17 +39,19 @@ public class TermAddEditActivity extends AppCompatActivity {
     private EditText enddateEdit;
     private ListView listView;
 
+    private boolean isEditing;
+
     final AppDataBase database = AppDataBase.getAppDatabase(this);
 
     final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    private EditableCourseAdapter mAdapter;
+//    private EditableCourseAdapter mAdapter;
 
     @Override
     protected void onResume() {
         super.onResume();
-        listView.setAdapter(fetchList());
+ //       listView.setAdapter(fetchList());
     }
-
+/*
     private EditableCourseAdapter fetchList() {
 
         AppDataBase database = AppDataBase.getAppDatabase(this);
@@ -56,6 +59,7 @@ public class TermAddEditActivity extends AppCompatActivity {
         ArrayList<Course> list = new ArrayList<>(Arrays.asList(courseArray));
         return new EditableCourseAdapter(this,list);
     }
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,7 @@ public class TermAddEditActivity extends AppCompatActivity {
         startdateEdit = (EditText) findViewById(R.id.editstartdate);
         enddateEdit = (EditText) findViewById(R.id.editenddate);
 
-        listView =(ListView)findViewById(R.id.contentlist);
+/*        listView =(ListView)findViewById(R.id.contentlist);
         listView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -78,6 +82,7 @@ public class TermAddEditActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        */
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,18 +111,33 @@ public class TermAddEditActivity extends AppCompatActivity {
             setTitle("Add Term");
         } else
         {
-            setTitle("View/Edit Term");
-            titleEdit.setText(m.title);
-            startdateEdit.setText(formatter.format(m.startDate));
-            enddateEdit.setText(formatter.format(m.endDate));
+            configure();
         }
+    }
+
+    private void configure()
+    {
+        if(isEditing) {
+            setTitle("Edit Term");
+        } else {
+            setTitle("View Term");
+        }
+        titleEdit.setText(m.title);
+        startdateEdit.setText(formatter.format(m.startDate));
+        enddateEdit.setText(formatter.format(m.endDate));
+        titleEdit.setEnabled(isEditing);
+        startdateEdit.setEnabled(isEditing);
+        enddateEdit.setEnabled(isEditing);
+        saveButton.setVisibility(isEditing?View.VISIBLE:View.INVISIBLE);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(m!=null) { // View, enable Edit & Delete
-            MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
+        if(isEditing) { // View, enable Edit & Delete
             inflater.inflate(R.menu.delete, menu);
+        } else {
+            inflater.inflate(R.menu.edit, menu);
         }
         return true;
     }
@@ -130,12 +150,16 @@ public class TermAddEditActivity extends AppCompatActivity {
                 database.termDao().delete(m);
                 finish();
                 return true;
+            case R.id.action_edit:
+                isEditing = true;
+                configure();
+                supportInvalidateOptionsMenu();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 }
-
+/*
 private class EditableCourseAdapter extends ArrayAdapter<Course> {
 
     private Context mContext;
@@ -164,3 +188,4 @@ private class EditableCourseAdapter extends ArrayAdapter<Course> {
         return listItem;
     }
 }
+*/
