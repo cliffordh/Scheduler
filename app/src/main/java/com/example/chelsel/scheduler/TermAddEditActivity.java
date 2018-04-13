@@ -55,9 +55,7 @@ public class TermAddEditActivity extends AppCompatActivity {
 
     private EmbeddedCourseAdapter fetchList() {
 
-        AppDataBase database = AppDataBase.getAppDatabase(this);
-        Course[] courseArray = database.courseDao().loadAll();
-        ArrayList<Course> list = new ArrayList<>(Arrays.asList(courseArray));
+        ArrayList<Course> list = new ArrayList<>(m.getCourseList());
         return new EmbeddedCourseAdapter(this,list);
     }
 
@@ -106,12 +104,13 @@ public class TermAddEditActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        m =(Term) getIntent().getSerializableExtra("term");
-        if(m==null)
+        Integer i=(Integer) getIntent().getSerializableExtra("termid");
+        if(i==null)
         {
             setTitle("Add Term");
         } else
         {
+            m = database.termDao().getTermWithCourses(i.intValue());
             configure();
         }
     }

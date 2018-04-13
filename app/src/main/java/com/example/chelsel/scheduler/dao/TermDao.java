@@ -39,9 +39,17 @@ public abstract class TermDao {
         insert(term);
     }
 
-//    public void updateTermWithCourses(Term term) {
-//
-//    }
+    @Query("UPDATE Course SET termid=999 WHERE termid = :termid")
+    public abstract void resetCoursesForTerm(int termid);
+
+    public void updateTermWithCourses(Term term) {
+        List<Course> courses = term.getCourseList();
+        resetCoursesForTerm(term.termid);
+        for (int i=0;i<courses.size();i++) {
+            courses.get(i).termid=term.termid;
+        }
+        updateCourseList(courses);
+    }
 
     public Term getTermWithCourses(int termid) {
         Term term = getTerm(termid);

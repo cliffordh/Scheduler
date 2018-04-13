@@ -47,7 +47,7 @@ public class TermListActivity extends AppCompatActivity {
                                     long id) {
                 Intent intent = new Intent(TermListActivity.this, TermAddEditActivity.class);
                 Term term = (Term) parent.getItemAtPosition(position);
-                intent.putExtra("term", term);
+                intent.putExtra("termid", new Integer(term.termid));
                 startActivity(intent);
             }
         });

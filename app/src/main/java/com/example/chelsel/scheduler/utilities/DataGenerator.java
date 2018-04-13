@@ -56,8 +56,9 @@ public class DataGenerator {
 
         Term[] terms = new Term[2];
         terms[0] = termInstance("Term 1",new Date(),new Date());
+        dataBase.termDao().insert(terms[0]);
         terms[0].setCourseList(Arrays.asList(courses[0],courses[1]));
-        dataBase.termDao().insertTermWithCourses(terms[0]);
+        dataBase.termDao().update(terms[0]);
         terms[1] = termInstance("Term 2",new Date(),new Date());
         terms[1].setCourseList(Arrays.asList(courses[2],courses[3],courses[4]));
         dataBase.termDao().insertTermWithCourses(terms[1]);
