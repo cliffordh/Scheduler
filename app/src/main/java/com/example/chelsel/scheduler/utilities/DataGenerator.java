@@ -5,12 +5,19 @@ import com.example.chelsel.scheduler.entity.Assessment;
 import com.example.chelsel.scheduler.entity.Course;
 import com.example.chelsel.scheduler.entity.Mentor;
 import com.example.chelsel.scheduler.entity.Term;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class DataGenerator {
 
     private static DataGenerator instance;
     private static AppDataBase dataBase;
+
+    private Mentor[] mentors;
+    private Course[] courses;
+    private Assessment[] assessments;
 
     public static DataGenerator with(AppDataBase appDataBase) {
 
@@ -36,7 +43,7 @@ public class DataGenerator {
         if (dataBase == null)
             return;
 
-        Mentor[] mentors = new Mentor[2];
+        mentors = new Mentor[2];
         mentors[0] = mentorInstance("Cliff","cliffordhelsel@me.com","5615031550");
         mentors[1] = mentorInstance("Lisa","lisamarie61283@gmail.com","5617067761");
 
@@ -49,18 +56,23 @@ public class DataGenerator {
 
         Term[] terms = new Term[2];
         terms[0] = termInstance("Term 1",new Date(),new Date());
+        terms[0].setCourseList(Arrays.asList(courses[0],courses[1]));
+        dataBase.termDao().insertTermWithCourses(terms[0]);
         terms[1] = termInstance("Term 2",new Date(),new Date());
-
-        dataBase.termDao().insert(terms);
+        terms[1].setCourseList(Arrays.asList(courses[2],courses[3],courses[4]));
+        dataBase.termDao().insertTermWithCourses(terms[1]);
     }
 
     public void generateCourses() {
         if (dataBase == null)
             return;
 
-        Course[] courses = new Course[2];
+        courses = new Course[5];
         courses[0] = courseInstance("Mobile App Development",new Date(),new Date());
         courses[1] = courseInstance("Physics",new Date(),new Date());
+        courses[2] = courseInstance("Chemistry",new Date(),new Date());
+        courses[3] = courseInstance("Geography",new Date(),new Date());
+        courses[4] = courseInstance("Project Management",new Date(),new Date());
 
         dataBase.courseDao().insert(courses);
     }
@@ -69,7 +81,7 @@ public class DataGenerator {
         if (dataBase == null)
             return;
 
-        Assessment[] assessments = new Assessment[2];
+        assessments = new Assessment[2];
         assessments[0] = assessmentInstance("Objective",new Date(), new Date());
         assessments[1] = assessmentInstance("Performance",new Date(), new Date());
 
@@ -119,31 +131,4 @@ public class DataGenerator {
         return assessment;
     }
 
-/*
-    public void generateCats() {
-
-        if (dataBase == null)
-            return;
-
-        Course[] courses = new Course[5];
-        courses[0] = catInstance("Tony", 3, 1);
-        courses[1] = catInstance("Tiger", 1, 1);
-        courses[2] = catInstance("Misty", 2, 2);
-        courses[3] = catInstance("Oscar", 5, 3);
-        courses[4] = catInstance("Puss", 4, 4);
-
-        dataBase.courseDao().insert(courses);
-    }
-
-
-    private Course catInstance(String name, int age, int owner) {
-        Course course = new Course();
-
-        course.name = name;
-        course.age = age;
-        course.hoomanId = owner;
-
-        return course;
-    }
-    */
 }

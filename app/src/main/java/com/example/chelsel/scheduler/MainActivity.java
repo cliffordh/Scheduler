@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         DataGenerator.with(database).generateMentors();
         DataGenerator.with(database).generateAssessments();
-        DataGenerator.with(database).generateTerms();
         DataGenerator.with(database).generateCourses();
+        DataGenerator.with(database).generateTerms();
     }
 
     /** Called when the user taps the Mentor button */

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Term implements Serializable {
@@ -20,4 +21,14 @@ public class Term implements Serializable {
     public Date startDate;
     public Date endDate;
 
+    public List<Course> getCourseList() {
+        return courseList;
+    }
+
+    public void setCourseList(List<Course> courseList) {
+        this.courseList = courseList;
+    }
+
+    @Ignore
+    private List<Course> courseList;
 }

@@ -8,9 +8,6 @@ import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
 
 import com.example.chelsel.scheduler.entity.Course;
-import com.example.chelsel.scheduler.pojo.CoursePojo;
-
-import java.util.List;
 
 @Dao
 public interface CourseDao {
