@@ -1,0 +1,19 @@
+// TODO: Edit courses associated with a Term
+// TODO: Edit assessments associated with a Course
+// TODO: Edit mentors associated with a Course
+// TODO: Fix course status popup
+// TODO: Add/edit course notes
+// TODO: Set notifications for start and end date of each course
+// TODO: Set alerts for goal dates for assessments
+// TODO: Add assessment list to course view
+// TODO: Add mentor list to course view
+// TODO: Assessment detail view including course due date, course notes
+// TODO: Note sharing feature
+// TODO: Add validation so a term may not be deleted if it has associated courses
+// TODO: Verify landscape functionality
+// TODO: Application title & icon
+// TODO: Add a programmatic user interface (mentor view?)
+// TODO: Add an imageview
+// TODO: Create a storyboard documenting the UI flow
+// TODO: Create a deployment package and include screenshots to confirm
+// TODO: Document app development
