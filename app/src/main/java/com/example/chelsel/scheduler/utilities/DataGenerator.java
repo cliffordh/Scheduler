@@ -1,6 +1,12 @@
 package com.example.chelsel.scheduler.utilities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.provider.ContactsContract;
+
 import com.example.chelsel.scheduler.AppDataBase;
+import com.example.chelsel.scheduler.dao.CourseDao;
+import com.example.chelsel.scheduler.dao.TermDao;
 import com.example.chelsel.scheduler.entity.Assessment;
 import com.example.chelsel.scheduler.entity.Course;
 import com.example.chelsel.scheduler.entity.Mentor;
@@ -30,9 +36,14 @@ public class DataGenerator {
         return instance;
     }
 
-    public void reset() {
+    public void reset(Context context) {
         if (dataBase == null)
             return;
+        // reset shared preferences
+        SharedPreferences sharedPref = context.getSharedPreferences("preferences",Context.MODE_PRIVATE);
+        sharedPref.edit().clear().commit();
+
+        // reset tables
         dataBase.mentorDao().truncateMentors();
         dataBase.assessmentDao().truncateAssessments();
         dataBase.termDao().truncateTerms();
@@ -50,30 +61,30 @@ public class DataGenerator {
         dataBase.mentorDao().insert(mentors);
     }
 
-    public void generateTerms() {
+   public void generateTerms(Context context) {
         if (dataBase == null)
             return;
 
         Term[] terms = new Term[2];
-        terms[0] = termInstance("Term 1",new Date(),new Date());
-        dataBase.termDao().insert(terms[0]);
+        terms[0] = termInstance(context,"Term 1",new Date(),new Date());
         terms[0].setCourseList(Arrays.asList(courses[0],courses[1]));
-        dataBase.termDao().update(terms[0]);
-        terms[1] = termInstance("Term 2",new Date(),new Date());
+        dataBase.termDao().insertTermWithCourses(terms[0]);
+        terms[1] = termInstance(context,"Term 2",new Date(),new Date());
         terms[1].setCourseList(Arrays.asList(courses[2],courses[3],courses[4]));
+        terms[1].termid = TermDao.getNextTermId(context);
         dataBase.termDao().insertTermWithCourses(terms[1]);
     }
 
-    public void generateCourses() {
+    public void generateCourses(Context context) {
         if (dataBase == null)
             return;
 
         courses = new Course[5];
-        courses[0] = courseInstance("Mobile App Development",new Date(),new Date());
-        courses[1] = courseInstance("Physics",new Date(),new Date());
-        courses[2] = courseInstance("Chemistry",new Date(),new Date());
-        courses[3] = courseInstance("Geography",new Date(),new Date());
-        courses[4] = courseInstance("Project Management",new Date(),new Date());
+        courses[0] = courseInstance(context,"Mobile App Development",new Date(),new Date());
+        courses[1] = courseInstance(context,"Physics",new Date(),new Date());
+        courses[2] = courseInstance(context,"Chemistry",new Date(),new Date());
+        courses[3] = courseInstance(context,"Geography",new Date(),new Date());
+        courses[4] = courseInstance(context,"Project Management",new Date(),new Date());
 
         dataBase.courseDao().insert(courses);
     }
@@ -99,22 +110,24 @@ public class DataGenerator {
         return mentor;
     }
 
-    private Term termInstance(String title, Date startDate, Date endDate) {
+    private Term termInstance(Context context, String title, Date startDate, Date endDate) {
         Term term = new Term();
 
         term.title = title;
         term.startDate = startDate;
         term.endDate = endDate;
 
+        term.termid = TermDao.getNextTermId(context);
         return term;
     }
 
-    private Course courseInstance(String title, Date startDate, Date endDate) {
+    private Course courseInstance(Context context, String title, Date startDate, Date endDate) {
         Course course = new Course();
 
         course.title = title;
         course.startDate = startDate;
         course.endDate = endDate;
+        course.courseid = CourseDao.getNextCourseId(context);
 
         return course;
     }

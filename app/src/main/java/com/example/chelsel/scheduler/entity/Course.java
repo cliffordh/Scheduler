@@ -13,7 +13,8 @@ import java.util.List;
 
 @Entity
 public class Course implements Serializable {
-    @PrimaryKey(autoGenerate = true)
+    // using Shared Preferences to maintain next primary key value to satisfy rubric
+    @PrimaryKey
     public int courseid;
 
     // foreign key, used by @Relation in pojo

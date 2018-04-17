@@ -6,11 +6,15 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.chelsel.scheduler.entity.Course;
 import com.example.chelsel.scheduler.entity.Term;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 @Dao
 public abstract class TermDao {
@@ -42,6 +46,9 @@ public abstract class TermDao {
     @Query("UPDATE Course SET termid=999 WHERE termid = :termid")
     public abstract void resetCoursesForTerm(int termid);
 
+    /* This function accepts a Term with embedded courses, removes all course associations for that term,
+    then reassociates based on the new course list. This handles deletions of courses in the term editor.
+     */
     public void updateTermWithCourses(Term term) {
         List<Course> courses = term.getCourseList();
         resetCoursesForTerm(term.termid);
@@ -70,5 +77,15 @@ public abstract class TermDao {
 
     @Query ("DELETE FROM Term")
     public abstract void truncateTerms();
+
+    public static int getNextTermId(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("preferences",Context.MODE_PRIVATE);
+        int termIdKey=sharedPref.getInt("termidkey",1);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("termidkey",termIdKey+1);
+        editor.commit();
+        return termIdKey;
+    }
+
 
 }

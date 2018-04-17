@@ -14,7 +14,8 @@ import java.util.List;
 @Entity
 public class Term implements Serializable {
 
-    @PrimaryKey (autoGenerate = true)
+    // using Shared Preferences to maintain next primary key value to satisfy rubric
+    @PrimaryKey
     public int termid;
 
     public String title;

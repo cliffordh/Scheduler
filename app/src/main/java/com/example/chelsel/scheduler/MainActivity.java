@@ -45,12 +45,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         AppDataBase database = AppDataBase.getAppDatabase(this);
 
-        DataGenerator.with(database).reset(); // clear out existing tables
+        // pass Context to utility methods to allow access to shared preferences
+        DataGenerator.with(database).reset(getApplicationContext()); // clear out existing tables
 
         DataGenerator.with(database).generateMentors();
         DataGenerator.with(database).generateAssessments();
-        DataGenerator.with(database).generateCourses();
-        DataGenerator.with(database).generateTerms();
+        DataGenerator.with(database).generateCourses(getApplicationContext());
+        DataGenerator.with(database).generateTerms(getApplicationContext());
     }
 
     /** Called when the user taps the Mentor button */

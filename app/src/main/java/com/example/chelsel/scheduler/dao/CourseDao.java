@@ -6,25 +6,37 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.chelsel.scheduler.entity.Course;
 
 @Dao
-public interface CourseDao {
+public abstract class CourseDao {
 
     @Insert
-    void insert(Course... course);
+    public abstract void insert(Course... course);
 
     @Update
-    void update(Course... course);
+    public abstract void update(Course... course);
 
     @Delete
-    void delete(Course... course);
+    public abstract void delete(Course... course);
 
     @Query ("DELETE FROM Course")
-    void truncateCourses();
+    public abstract void truncateCourses();
 
     @Transaction
     @Query("Select * FROM Course")
-    Course[] loadAll();
+    public abstract Course[] loadAll();
+
+    public static int getNextCourseId(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("preferences",Context.MODE_PRIVATE);
+        int courseIdKey=sharedPref.getInt("courseidkey",1);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("courseidkey",courseIdKey+1);
+        editor.commit();
+        return courseIdKey;
+    }
+
 }
