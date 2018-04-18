@@ -16,11 +16,13 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chelsel.scheduler.dao.TermDao;
 import com.example.chelsel.scheduler.entity.Course;
 import com.example.chelsel.scheduler.entity.Term;
 
@@ -34,13 +36,10 @@ import java.util.ResourceBundle;
 public class TermAddEditActivity extends AppCompatActivity {
 
     private Term m;
-    private Button saveButton;
     private EditText titleEdit;
     private EditText startdateEdit;
     private EditText enddateEdit;
     private ListView listView;
-
-    private boolean isEditing;
 
     final AppDataBase database = AppDataBase.getAppDatabase(this);
 
@@ -54,8 +53,8 @@ public class TermAddEditActivity extends AppCompatActivity {
     }
 
     private EmbeddedCourseAdapter fetchList() {
-
-        ArrayList<Course> list = new ArrayList<>(m.getCourseList());
+        ArrayList<Course> list;
+        list = new ArrayList<>(Arrays.asList(database.courseDao().loadAvailableCoursesForTerm(m!=null?m.termid:0)));
         return new EmbeddedCourseAdapter(this,list);
     }
 
@@ -65,7 +64,6 @@ public class TermAddEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_term_add_edit);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        saveButton = findViewById(R.id.savebutton);
         titleEdit = findViewById(R.id.edittitle);
         startdateEdit = findViewById(R.id.editstartdate);
         enddateEdit = findViewById(R.id.editenddate);
@@ -83,26 +81,6 @@ public class TermAddEditActivity extends AppCompatActivity {
         });
             */
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isUpdate=true;
-                if(m==null) {
-                   m=new Term();
-                   isUpdate=false;
-                }
-                m.title=titleEdit.getText().toString().trim();
-                m.startDate=formatter.parse(startdateEdit.getText().toString().trim(),new ParsePosition(0));
-                m.endDate=formatter.parse(enddateEdit.getText().toString().trim(),new ParsePosition(0));
-                if(isUpdate)
-                    database.termDao().update(m);
-                else
-                    database.termDao().insert(m);
-                Toast.makeText(getApplicationContext(), "Term saved!",
-                        Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Integer i=(Integer) getIntent().getSerializableExtra("termid");
         if(i==null)
@@ -111,33 +89,21 @@ public class TermAddEditActivity extends AppCompatActivity {
         } else
         {
             m = database.termDao().getTermWithCourses(i.intValue());
-            configure();
+            setTitle("View/Edit Term");
+            titleEdit.setText(m.title);
+            startdateEdit.setText(formatter.format(m.startDate));
+            enddateEdit.setText(formatter.format(m.endDate));
         }
     }
 
-    private void configure()
-    {
-        if(isEditing) {
-            setTitle("Edit Term");
-        } else {
-            setTitle("View Term");
-        }
-        titleEdit.setText(m.title);
-        startdateEdit.setText(formatter.format(m.startDate));
-        enddateEdit.setText(formatter.format(m.endDate));
-        titleEdit.setEnabled(isEditing);
-        startdateEdit.setEnabled(isEditing);
-        enddateEdit.setEnabled(isEditing);
-        saveButton.setVisibility(isEditing?View.VISIBLE:View.INVISIBLE);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if(isEditing) { // View, enable Edit & Delete
-            inflater.inflate(R.menu.delete, menu);
-        } else {
+        if(m!=null) { // View, enable Edit & Delete
             inflater.inflate(R.menu.edit, menu);
+        } else {
+            inflater.inflate(R.menu.save, menu);
         }
         return true;
     }
@@ -150,11 +116,24 @@ public class TermAddEditActivity extends AppCompatActivity {
                 database.termDao().delete(m);
                 finish();
                 return true;
-            case R.id.action_edit:
-                isEditing = true;
-                configure();
-                supportInvalidateOptionsMenu();
-            default:
+            case R.id.action_save:
+                boolean isUpdate=true;
+                if(m==null) {
+                   m=new Term();
+                   m.termid= TermDao.getNextTermId(getApplicationContext());
+                   isUpdate=false;
+                }
+                m.title=titleEdit.getText().toString().trim();
+                m.startDate=formatter.parse(startdateEdit.getText().toString().trim(),new ParsePosition(0));
+                m.endDate=formatter.parse(enddateEdit.getText().toString().trim(),new ParsePosition(0));
+                if(isUpdate)
+                    database.termDao().update(m);
+                else
+                    database.termDao().insert(m);
+                Toast.makeText(getApplicationContext(), "Term saved!", Toast.LENGTH_SHORT).show();
+                finish();
+                return true;
+             default:
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -182,6 +161,11 @@ class EmbeddedCourseAdapter extends ArrayAdapter<Course> {
 
         TextView title = listItem.findViewById(R.id.textView_title);
         title.setText(currentCourse.title);
+
+        CheckBox cb = listItem.findViewById(R.id.checkbox_selected);
+        if(currentCourse.termid!=0) {
+            cb.setChecked(true);
+        }
 
         return listItem;
     }

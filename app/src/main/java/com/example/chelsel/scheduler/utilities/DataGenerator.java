@@ -70,7 +70,7 @@ public class DataGenerator {
         terms[0].setCourseList(Arrays.asList(courses[0],courses[1]));
         dataBase.termDao().insertTermWithCourses(terms[0]);
         terms[1] = termInstance(context,"Term 2",new Date(),new Date());
-        terms[1].setCourseList(Arrays.asList(courses[2],courses[3],courses[4]));
+        terms[1].setCourseList(Arrays.asList(courses[2],courses[3]));
         terms[1].termid = TermDao.getNextTermId(context);
         dataBase.termDao().insertTermWithCourses(terms[1]);
     }
@@ -79,12 +79,13 @@ public class DataGenerator {
         if (dataBase == null)
             return;
 
-        courses = new Course[5];
+        courses = new Course[6];
         courses[0] = courseInstance(context,"Mobile App Development",new Date(),new Date());
         courses[1] = courseInstance(context,"Physics",new Date(),new Date());
         courses[2] = courseInstance(context,"Chemistry",new Date(),new Date());
         courses[3] = courseInstance(context,"Geography",new Date(),new Date());
         courses[4] = courseInstance(context,"Project Management",new Date(),new Date());
+        courses[5] = courseInstance(context,"English I",new Date(),new Date());
 
         dataBase.courseDao().insert(courses);
     }

@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 
 import com.example.chelsel.scheduler.entity.Course;
 
+import java.util.ArrayList;
+
 @Dao
 public abstract class CourseDao {
 
@@ -29,6 +31,9 @@ public abstract class CourseDao {
     @Transaction
     @Query("Select * FROM Course")
     public abstract Course[] loadAll();
+
+    @Query("SELECT * FROM Course where termid = 0 OR termid =:termid")
+    public abstract Course[] loadAvailableCoursesForTerm(int termid);
 
     public static int getNextCourseId(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("preferences",Context.MODE_PRIVATE);

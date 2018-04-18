@@ -75,7 +75,7 @@ public class CourseAddEditActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if(m!=null) { // View, enable Edit & Delete
             MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.delete, menu);
+            inflater.inflate(R.menu.edit, menu);
         }
         return true;
     }

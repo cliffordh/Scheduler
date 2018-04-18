@@ -2,12 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingLeft="15dip"
+        android:paddingRight="10dip">
 
     <TextView
         android:id="@+id/textView_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp" />
+        android:layout_width="0dip"
+        android:layout_weight="0.85"
+        android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/checkbox_selected"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"/>
+    </LinearLayout>
 
 </RelativeLayout>
