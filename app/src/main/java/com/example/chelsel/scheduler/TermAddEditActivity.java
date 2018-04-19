@@ -1,7 +1,6 @@
 package com.example.chelsel.scheduler;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,10 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,15 +29,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class TermAddEditActivity extends AppCompatActivity {
 
-    private Term m;
+    private Term term;
     private EditText titleEdit;
     private EditText startdateEdit;
     private EditText enddateEdit;
     private ListView listView;
+
+    private boolean isNew;
+
+    private ArrayList<Course> list;
 
     final AppDataBase database = AppDataBase.getAppDatabase(this);
 
@@ -53,9 +54,8 @@ public class TermAddEditActivity extends AppCompatActivity {
     }
 
     private EmbeddedCourseAdapter fetchList() {
-        ArrayList<Course> list;
-        list = new ArrayList<>(Arrays.asList(database.courseDao().loadAvailableCoursesForTerm(m!=null?m.termid:0)));
-        return new EmbeddedCourseAdapter(this,list);
+        list = new ArrayList<>(Arrays.asList(database.courseDao().loadAvailableCoursesForTerm(term !=null? term.termid:0)));
+        return new EmbeddedCourseAdapter(this,list, term);
     }
 
     @Override
@@ -69,30 +69,23 @@ public class TermAddEditActivity extends AppCompatActivity {
         enddateEdit = findViewById(R.id.editenddate);
 
         listView = findViewById(R.id.contentlist);
-/*        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Intent intent = new Intent(CourseListActivity.this, CourseAddEditActivity.class);
-                Course course = (Course) parent.getItemAtPosition(position);
-                intent.putExtra("course", course);
-                startActivity(intent);
-            }
-        });
-            */
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Integer i=(Integer) getIntent().getSerializableExtra("termid");
         if(i==null)
         {
             setTitle("Add Term");
+            isNew = true;
+            term =new Term();
+            term.termid= TermDao.getNextTermId(getApplicationContext());
         } else
         {
-            m = database.termDao().getTermWithCourses(i.intValue());
+            isNew = false;
+            term = database.termDao().getTerm(i.intValue());
             setTitle("View/Edit Term");
-            titleEdit.setText(m.title);
-            startdateEdit.setText(formatter.format(m.startDate));
-            enddateEdit.setText(formatter.format(m.endDate));
+            titleEdit.setText(term.title);
+            startdateEdit.setText(formatter.format(term.startDate));
+            enddateEdit.setText(formatter.format(term.endDate));
         }
     }
 
@@ -100,7 +93,7 @@ public class TermAddEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if(m!=null) { // View, enable Edit & Delete
+        if(!isNew) { // View, enable Edit & Delete
             inflater.inflate(R.menu.edit, menu);
         } else {
             inflater.inflate(R.menu.save, menu);
@@ -113,23 +106,19 @@ public class TermAddEditActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_delete:
-                database.termDao().delete(m);
+                database.termDao().delete(term);
                 finish();
                 return true;
             case R.id.action_save:
-                boolean isUpdate=true;
-                if(m==null) {
-                   m=new Term();
-                   m.termid= TermDao.getNextTermId(getApplicationContext());
-                   isUpdate=false;
-                }
-                m.title=titleEdit.getText().toString().trim();
-                m.startDate=formatter.parse(startdateEdit.getText().toString().trim(),new ParsePosition(0));
-                m.endDate=formatter.parse(enddateEdit.getText().toString().trim(),new ParsePosition(0));
-                if(isUpdate)
-                    database.termDao().update(m);
+                term.title=titleEdit.getText().toString().trim();
+                term.startDate=formatter.parse(startdateEdit.getText().toString().trim(),new ParsePosition(0));
+                term.endDate=formatter.parse(enddateEdit.getText().toString().trim(),new ParsePosition(0));
+                // attach a Course array to the Term with the selected courses
+                term.setCourseList(list);
+                if(isNew)
+                    database.termDao().insertTermWithCourses(term);
                 else
-                    database.termDao().insert(m);
+                    database.termDao().updateTermWithCourses(term);
                 Toast.makeText(getApplicationContext(), "Term saved!", Toast.LENGTH_SHORT).show();
                 finish();
                 return true;
@@ -143,11 +132,13 @@ class EmbeddedCourseAdapter extends ArrayAdapter<Course> {
 
     private Context mContext;
     private List<Course> courseList = new ArrayList<>();
+    private Term term;
 
-    public EmbeddedCourseAdapter(@NonNull Context context, ArrayList<Course> list) {
+    public EmbeddedCourseAdapter(@NonNull Context context, ArrayList<Course> list, Term term) {
         super(context,0,list);
         mContext = context;
         courseList = list;
+        this.term = term;
     }
 
     @NonNull
@@ -157,7 +148,7 @@ class EmbeddedCourseAdapter extends ArrayAdapter<Course> {
         if(listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.embedded_course_row,parent,false);
 
-        Course currentCourse = courseList.get(position);
+        final Course currentCourse = courseList.get(position);
 
         TextView title = listItem.findViewById(R.id.textView_title);
         title.setText(currentCourse.title);
@@ -166,6 +157,14 @@ class EmbeddedCourseAdapter extends ArrayAdapter<Course> {
         if(currentCourse.termid!=0) {
             cb.setChecked(true);
         }
+
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                currentCourse.termid = isChecked?term.termid:0;
+            }
+        });
+
+        // add listener to the checkbox to change the termid in the associated course
 
         return listItem;
     }
