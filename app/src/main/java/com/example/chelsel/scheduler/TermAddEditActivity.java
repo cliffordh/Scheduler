@@ -45,7 +45,6 @@ public class TermAddEditActivity extends AppCompatActivity {
     final AppDataBase database = AppDataBase.getAppDatabase(this);
 
     final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-//    private EditableCourseAdapter mAdapter;
 
     @Override
     protected void onResume() {
@@ -114,12 +113,18 @@ public class TermAddEditActivity extends AppCompatActivity {
                 term.startDate=formatter.parse(startdateEdit.getText().toString().trim(),new ParsePosition(0));
                 term.endDate=formatter.parse(enddateEdit.getText().toString().trim(),new ParsePosition(0));
                 // attach a Course array to the Term with the selected courses
-                term.setCourseList(list);
+                ArrayList<Course> newList=new ArrayList<>();
+                for (Course course:list) {
+                    if(course.termid!=0)
+                        newList.add(course);
+                }
+                term.setCourseList(newList);
                 if(isNew)
                     database.termDao().insertTermWithCourses(term);
                 else
                     database.termDao().updateTermWithCourses(term);
                 Toast.makeText(getApplicationContext(), "Term saved!", Toast.LENGTH_SHORT).show();
+                ArrayList<Course> list2 = new ArrayList<>(Arrays.asList(database.courseDao().loadAvailableCoursesForTerm(term !=null? term.termid:0)));
                 finish();
                 return true;
              default:
@@ -157,6 +162,11 @@ class EmbeddedCourseAdapter extends ArrayAdapter<Course> {
         if(currentCourse.termid!=0) {
             cb.setChecked(true);
         }
+
+        /*else {
+            cb.setChecked(false);
+        }
+        */
 
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

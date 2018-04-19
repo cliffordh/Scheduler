@@ -43,7 +43,8 @@ public abstract class TermDao {
         insert(term);
     }
 
-    @Query("UPDATE Course SET termid=999 WHERE termid = :termid")
+    /* Disassociate any courses from the term. */
+    @Query("UPDATE Course SET termid=0 WHERE termid = :termid")
     public abstract void resetCoursesForTerm(int termid);
 
     /* This function accepts a Term with embedded courses, removes all course associations for that term,
