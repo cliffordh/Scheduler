@@ -26,6 +26,22 @@ public class Course implements Serializable {
     public String status;
     public String notes;
 
+    public List<Assessment> getAssessmentList() {
+        return assessmentList;
+    }
+
+    public List<Mentor> getMentorList() {
+        return mentorList;
+    }
+
+    public void setAssessmentList(List<Assessment> assessmentList) {
+        this.assessmentList = assessmentList;
+    }
+
+    public void setMentorList(List<Mentor> mentorList) {
+        this.mentorList = mentorList;
+    }
+
     @Ignore
     private List<Mentor> mentorList;
 

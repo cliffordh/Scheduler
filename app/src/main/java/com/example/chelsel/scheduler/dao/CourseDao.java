@@ -9,9 +9,12 @@ import android.arch.persistence.room.Update;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.chelsel.scheduler.entity.Assessment;
 import com.example.chelsel.scheduler.entity.Course;
+import com.example.chelsel.scheduler.entity.Mentor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public abstract class CourseDao {
@@ -43,5 +46,59 @@ public abstract class CourseDao {
         editor.commit();
         return courseIdKey;
     }
+
+    @Query("SELECT * FROM Course where courseid = :courseid")
+    public abstract Course getCourse(int courseid);
+
+    public void insertCourseWithLists(Course course) {
+        List<Assessment> assessments = course.getAssessmentList();
+        for (int i=0;i<assessments.size();i++) {
+            assessments.get(i).courseid=course.courseid;
+        }
+
+        List<Mentor> mentors = course.getMentorList();
+        for (int i=0;i<mentors.size();i++) {
+            mentors.get(i).courseid=course.courseid;
+        }
+
+        updateAssessmentList(assessments);
+        updateMentorList(mentors);
+        insert(course);
+        System.out.println("Inserted Course ID: "+course.courseid);
+    }
+
+    /* Disassociate any assessments from the course. */
+    @Query("UPDATE Assessment SET courseid=0 WHERE courseid = :courseid")
+    public abstract void resetAssessmentsForCourse(int courseid);
+
+    /* Disassociate any mentors from the course. */
+    @Query("UPDATE Mentor SET courseid=0 WHERE courseid = :courseid")
+    public abstract void resetMentorsForCourse(int courseid);
+
+    /* This function accepts a Course with embedded assessments and mentors, removes all
+    associations for that course, then reassociates.
+     */
+    public void updateCourseWithLists(Course course) {
+        List<Assessment> assessments = course.getAssessmentList();
+        resetAssessmentsForCourse(course.courseid);
+        for (int i=0;i<assessments.size();i++) {
+            assessments.get(i).courseid=course.courseid;
+        }
+
+        List<Mentor> mentors = course.getMentorList();
+        resetMentorsForCourse(course.courseid);
+        for (int i=0;i<mentors.size();i++) {
+            mentors.get(i).courseid=course.courseid;
+        }
+
+        updateAssessmentList(assessments);
+        updateMentorList(mentors);
+    }
+
+    @Update
+    public abstract void updateAssessmentList(List<Assessment> assessments);
+
+    @Update
+    public abstract void updateMentorList(List<Mentor> mentors);
 
 }

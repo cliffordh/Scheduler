@@ -1,4 +1,4 @@
-// TODO: Edit courses associated with a Term
+// X: Edit courses associated with a Term
 // TODO: Edit assessments associated with a Course
 // TODO: Edit mentors associated with a Course
 // TODO: Fix course status popup

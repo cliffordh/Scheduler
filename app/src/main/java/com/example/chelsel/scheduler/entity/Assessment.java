@@ -21,4 +21,5 @@ public class Assessment {
     public Boolean startAlert;
     public Boolean endAlert;
     public Boolean goalAlert;
+
 }

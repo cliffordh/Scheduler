@@ -124,7 +124,6 @@ public class TermAddEditActivity extends AppCompatActivity {
                 else
                     database.termDao().updateTermWithCourses(term);
                 Toast.makeText(getApplicationContext(), "Term saved!", Toast.LENGTH_SHORT).show();
-                ArrayList<Course> list2 = new ArrayList<>(Arrays.asList(database.courseDao().loadAvailableCoursesForTerm(term !=null? term.termid:0)));
                 finish();
                 return true;
              default:
@@ -152,7 +151,7 @@ class EmbeddedCourseAdapter extends ArrayAdapter<Course> {
         //TODO: Optimize layout so that getView is not called repeatedly
         View listItem = convertView;
         if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.embedded_course_row,parent,false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.embedded_row,parent,false);
 
         final Course currentCourse = courseList.get(position);
 
