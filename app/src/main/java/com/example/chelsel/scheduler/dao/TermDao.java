@@ -41,6 +41,7 @@ public abstract class TermDao {
         }
         updateCourseList(courses);
         insert(term);
+        System.out.println("Inserted Term ID: "+term.termid);
     }
 
     /* Disassociate any courses from the term. */
@@ -85,6 +86,7 @@ public abstract class TermDao {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("termidkey",termIdKey+1);
         editor.commit();
+        System.out.println("Next Term ID: "+termIdKey);
         return termIdKey;
     }
 

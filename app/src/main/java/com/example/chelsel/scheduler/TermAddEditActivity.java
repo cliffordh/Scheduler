@@ -149,6 +149,7 @@ class EmbeddedCourseAdapter extends ArrayAdapter<Course> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        //TODO: Optimize layout so that getView is not called repeatedly
         View listItem = convertView;
         if(listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.embedded_course_row,parent,false);
@@ -159,22 +160,18 @@ class EmbeddedCourseAdapter extends ArrayAdapter<Course> {
         title.setText(currentCourse.title);
 
         CheckBox cb = listItem.findViewById(R.id.checkbox_selected);
-        if(currentCourse.termid!=0) {
+        cb.setOnCheckedChangeListener(null);
+        if(currentCourse.termid==term.termid) {
             cb.setChecked(true);
-        }
-
-        /*else {
+        } else {
             cb.setChecked(false);
         }
-        */
 
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 currentCourse.termid = isChecked?term.termid:0;
             }
         });
-
-        // add listener to the checkbox to change the termid in the associated course
 
         return listItem;
     }
